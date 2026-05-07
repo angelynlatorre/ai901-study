@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-901 Study Journey</title>
+<style>
+  :root {
+    --bg: #0b1020;
+    --bg-2: #11172e;
+    --panel: #161d39;
+    --ink: #e7ecff;
+    --ink-dim: #9aa3c7;
+    --accent: #7c8cff;
+    --accent-2: #58e1c2;
+    --accent-3: #ffb86b;
+    --done: #58e1c2;
+    --line: #2a3460;
+    --shadow: 0 10px 30px rgba(0,0,0,0.35);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(124,140,255,0.18), transparent 60%),
+      radial-gradient(800px 500px at 90% 10%, rgba(88,225,194,0.12), transparent 60%),
+      linear-gradient(180deg, var(--bg), var(--bg-2));
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.55;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  header {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 56px 32px 24px;
+  }
+  .eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: rgba(88,225,194,0.08);
+    border: 1px solid rgba(88,225,194,0.25);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: clamp(32px, 4.4vw, 52px);
+    margin: 0 0 12px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    background: linear-gradient(120deg, #fff 20%, #b9c2ff 60%, #58e1c2 110%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle { color: var(--ink-dim); font-size: 18px; max-width: 720px; }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px;
+  }
+  .pill {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+  .pill strong { color: var(--ink); }
+
+  .progress-wrap {
+    max-width: 1100px;
+    margin: 24px auto 0;
+    padding: 0 32px;
+  }
+  .progress-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
+    box-shadow: var(--shadow);
+  }
+  .progress-card .label { font-size: 13px; color: var(--ink-dim); }
+  .progress-bar {
+    flex: 1 1 280px;
+    height: 10px;
+    background: #0f1530;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transition: width 400ms ease;
+  }
+  .progress-stat { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .reset-btn {
+    background: transparent;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .reset-btn:hover { color: var(--ink); border-color: var(--accent); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 32px; }
+
+  .week {
+    margin-top: 48px;
+    position: relative;
+  }
+  .week-header {
+    display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px;
+  }
+  .week-number {
+    font-size: 12px;
+    color: var(--accent-2);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .week-title {
+    font-size: 26px;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .week-goal {
+    color: var(--ink-dim);
+    font-size: 14px;
+    margin: 0 0 24px;
+    max-width: 760px;
+  }
+
+  .journey {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 14px;
+  }
+  .journey::before {
+    content: '';
+    position: absolute;
+    left: 4%;
+    right: 4%;
+    top: 22px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--line), rgba(124,140,255,0.4), var(--line));
+    z-index: 0;
+  }
+  .day {
+    position: relative;
+    z-index: 1;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 12px 14px;
+    cursor: pointer;
+    transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .day:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 24px rgba(124,140,255,0.15);
+  }
+  .day.is-done {
+    border-color: rgba(88,225,194,0.5);
+    background: linear-gradient(180deg, rgba(88,225,194,0.07), var(--panel));
+  }
+  .day.is-mock { border-color: rgba(255,184,107,0.45); }
+  .dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--bg-2);
+    border: 2px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-dim);
+  }
+  .day.is-done .dot {
+    background: var(--accent-2);
+    border-color: var(--accent-2);
+    color: #0b1020;
+  }
+  .day.is-mock .dot { border-color: var(--accent-3); color: var(--accent-3); }
+  .day-num { font-size: 11px; color: var(--ink-dim); text-align: center; display: block; }
+  .day-topic {
+    font-size: 13px;
+    text-align: center;
+    margin-top: 4px;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .day-time {
+    text-align: center;
+    font-size: 10px;
+    color: var(--ink-dim);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(5, 8, 20, 0.7);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    max-width: 620px;
+    width: 100%;
+    max-height: 86vh;
+    overflow-y: auto;
+    padding: 28px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    animation: pop 220ms ease;
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .modal h2 { margin: 0 0 4px; font-size: 24px; }
+  .modal .modal-meta {
+    color: var(--ink-dim); font-size: 13px; margin-bottom: 18px;
+  }
+  .modal h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent-2);
+    margin: 22px 0 8px;
+  }
+  .modal p { margin: 0 0 12px; color: var(--ink); }
+  .modal ul, .modal ol { color: var(--ink); padding-left: 22px; }
+  .modal li { margin-bottom: 4px; }
+  .modal .tag {
+    display: inline-block;
+    background: rgba(124,140,255,0.12);
+    border: 1px solid rgba(124,140,255,0.3);
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    background: var(--accent);
+    color: #0b1020;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .btn:hover { filter: brightness(1.1); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn.ghost:hover { border-color: var(--accent); }
+  .btn.done-btn { background: var(--accent-2); }
+
+  /* ----- Detail panels (Key concepts / Things to remember / Code) ----- */
+  .detail-block {
+    background: rgba(124,140,255,0.05);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+  }
+  .detail-block.remember {
+    background: rgba(255,184,107,0.06);
+    border-color: rgba(255,184,107,0.25);
+  }
+  .detail-block ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .detail-block li { margin-bottom: 6px; line-height: 1.55; }
+  .detail-block li strong { color: var(--accent-2); }
+  .detail-block.remember li strong { color: var(--accent-3); }
+  .term {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: rgba(124,140,255,0.12);
+    border: 1px solid rgba(124,140,255,0.25);
+    color: var(--ink);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.92em;
+  }
+  .code-block {
+    background: #0a0f24;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 10px 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12.5px;
+    color: #b9c2ff;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.5;
+  }
+
+  .quiz-toggle {
+    background: rgba(124,140,255,0.06);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-top: 8px;
+  }
+  .quiz-toggle summary {
+    cursor: pointer;
+    color: var(--accent);
+    font-size: 13px;
+    list-style: none;
+  }
+  .quiz-toggle summary::-webkit-details-marker { display: none; }
+  .quiz-toggle summary::before { content: '▸ '; }
+  .quiz-toggle[open] summary::before { content: '▾ '; }
+  .quiz-toggle ol { margin: 10px 0 0; }
+
+  .legend {
+    display: flex; gap: 18px; flex-wrap: wrap;
+    margin-top: 14px; font-size: 12px; color: var(--ink-dim);
+  }
+  .legend-dot {
+    display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+    margin-right: 6px; vertical-align: middle;
+  }
+
+  footer {
+    max-width: 1100px;
+    margin: 60px auto 40px;
+    padding: 24px 32px;
+    color: var(--ink-dim);
+    font-size: 13px;
+    border-top: 1px solid var(--line);
+  }
+  footer .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: start;
+  }
+  footer .footer-meta {
+    text-align: right;
+    font-size: 12px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+  }
+  footer .disclaimer {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    font-size: 12px;
+    color: var(--ink-dim);
+    font-style: italic;
+    line-height: 1.6;
+  }
+  @media (max-width: 600px) {
+    footer .footer-grid { grid-template-columns: 1fr; }
+    footer .footer-meta { text-align: left; }
+  }
+
+  @media (max-width: 800px) {
+    .journey { grid-template-columns: repeat(4, 1fr); }
+    .journey::before { display: none; }
+  }
+  @media (max-width: 480px) {
+    .journey { grid-template-columns: repeat(2, 1fr); }
+    header { padding: 40px 20px 16px; }
+    main { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="eyebrow">Microsoft Azure · AI-901T00-A</span>
+  <h1>Your 4-Week AI-901<br>Study Journey</h1>
+  <p class="subtitle">A guided path through Microsoft's <em>Introduction to AI in Azure</em> — 28 days, ~30 minutes a day, ending with a mock exam. Click any day for the key concepts, exam-trap reminders, code you should recognize, mandatory reading, and self-quiz.</p>
+  <div class="meta-row">
+    <span class="pill">⏱ <strong>~14 hrs total</strong></span>
+    <span class="pill">📚 <strong>11 mandatory modules</strong></span>
+    <span class="pill">🎯 <strong>Exam: AI-901 (beta)</strong></span>
+    <span class="pill">🧪 <strong>6 hands-on labs</strong></span>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-card">
+    <span class="label">Progress</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-stat"><span id="doneCount">0</span> / 28 days</span>
+    <button class="reset-btn" id="resetBtn">Reset</button>
+  </div>
+  <div class="legend">
+    <span><span class="legend-dot" style="background:var(--accent-2)"></span>Complete</span>
+    <span><span class="legend-dot" style="background:var(--bg-2);border:2px solid var(--line)"></span>Upcoming</span>
+    <span><span class="legend-dot" style="background:var(--accent-3)"></span>Mock exam</span>
+  </div>
+</div>
+
+<main id="journey-root"></main>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" id="modal"></div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-attribution">
+      Built from the official <a href="https://learn.microsoft.com/en-us/training/courses/ai-901t00" target="_blank" rel="noopener">Microsoft Learn course outline</a> and the <a href="https://learn.microsoft.com/en-us/credentials/certifications/exams/ai-901/" target="_blank" rel="noopener">AI-901 exam page</a>. Progress is saved locally in your browser.
+    </div>
+    <div class="footer-meta">
+      <strong>Last updated:</strong> <span id="lastUpdated">2026-05-07</span><br>
+      <strong>Version:</strong> 1.1
+    </div>
+  </div>
+  <div class="disclaimer">
+    Personal study notes for the Microsoft AI-901 (Azure AI Fundamentals, refreshed) certification. Not affiliated with, endorsed by, or official content of Microsoft. Refer to <a href="https://learn.microsoft.com" target="_blank" rel="noopener">learn.microsoft.com</a> for official material. Microsoft, Azure, and AI-901 are trademarks of Microsoft Corporation.
+  </div>
+</footer>
+
+<script>
+const days = [
+  // ============ WEEK 1: Foundations ============
+  { day: 1, week: 1, topic: "What is AI?", time: "30 min",
+    objective: "List major AI workload categories and identify which one fits a given business scenario.",
+    read: [{ label: "Introduction to AI concepts — Units 1–2", url: "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/" }],
+    examTag: "AI workloads & considerations",
+    concepts: [
+      "<strong>Artificial intelligence (AI)</strong> = software that mimics human cognitive abilities. Microsoft groups workloads into 6 categories.",
+      "<strong>Generative AI</strong> — produces new content (text, code, images, audio) from a prompt. Powered by large foundation models.",
+      "<strong>Machine learning</strong> — predicts outputs from patterns in data. Includes regression (numbers), classification (categories), clustering (groups).",
+      "<strong>Computer vision</strong> — interprets images & video: classification, object detection, OCR, image generation.",
+      "<strong>Natural language processing (NLP)</strong> — understands text & speech: sentiment, entities, translation, summarization.",
+      "<strong>Document intelligence / Information extraction</strong> — pulls structured data (fields, tables) from forms, invoices, IDs.",
+      "<strong>Knowledge mining</strong> — indexes large unstructured corpora so they're searchable and minable for insights."
+    ],
+    remember: [
+      "<strong>Generative AI is a TYPE of AI, not a synonym for AI.</strong> The exam tests whether you can pick generative vs. ML vs. CV given a scenario.",
+      "<strong>Document intelligence ≠ knowledge mining.</strong> Document intelligence extracts fields from one document. Knowledge mining searches across many.",
+      "If a scenario says <em>&quot;create&quot;, &quot;draft&quot;, &quot;generate&quot;</em> → generative AI. If it says <em>&quot;predict&quot;, &quot;forecast&quot;, &quot;classify&quot;</em> → machine learning."
+    ],
+    quiz: [
+      "Name the 6 AI workload categories Microsoft uses.",
+      "Which workload would you use to draft a marketing email automatically?",
+      "Which workload would you use to predict next month's product demand?",
+      "Which workload extracts the total amount and date from a scanned invoice?",
+      "What's the one-sentence difference between AI and machine learning?"
+    ] },
+
+  { day: 2, week: 1, topic: "Machine Learning fundamentals", time: "30 min",
+    objective: "Describe supervised vs. unsupervised, regression vs. classification, and the train→test→deploy lifecycle.",
+    read: [{ label: "Introduction to AI concepts — Unit 2", url: "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/" }],
+    examTag: "Fundamental ML principles",
+    concepts: [
+      "<strong>Supervised learning</strong> — training data has known labels. Model learns input→output mapping. Used for regression & classification.",
+      "<strong>Unsupervised learning</strong> — no labels. Model finds structure (e.g., clustering customers by behavior).",
+      "<strong>Regression</strong> predicts a numeric value (price, temperature, sales).",
+      "<strong>Classification</strong> predicts a category — binary (spam/not spam) or multi-class (cat/dog/rabbit).",
+      "<strong>Features</strong> are the inputs (columns); the <strong>label</strong> is the target you're predicting.",
+      "<strong>Training</strong> = fitting a model on past data. <strong>Inference</strong> = using the trained model to predict on new data.",
+      "Models are evaluated on a <strong>held-out test set</strong> to see how they generalize."
+    ],
+    remember: [
+      "<strong>Regression = number. Classification = category. Clustering = no labels.</strong> One question almost always tests this.",
+      "<strong>Features are inputs, labels are outputs.</strong> Don't mix them up.",
+      "Common evaluation metrics: <span class='term'>Accuracy</span>, <span class='term'>Precision</span>, <span class='term'>Recall</span>, <span class='term'>F1</span> for classification; <span class='term'>RMSE</span>, <span class='term'>MAE</span>, <span class='term'>R²</span> for regression."
+    ],
+    quiz: [
+      "Predicting whether an email is spam — regression or classification?",
+      "Predicting the price of a house — regression or classification?",
+      "Grouping customers by purchase behavior with no predefined groups — what kind of learning?",
+      "What's the difference between training and inference?",
+      "Why is a held-out test set important?"
+    ] },
+
+  { day: 3, week: 1, topic: "Computer vision & NLP overview", time: "30 min",
+    objective: "Identify common CV tasks (classification, detection, OCR, segmentation) and NLP tasks (sentiment, entities, translation).",
+    read: [{ label: "Introduction to AI concepts — Units 3–4", url: "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/" }],
+    examTag: "AI workloads",
+    concepts: [
+      "<strong>Image classification</strong> — assigns ONE label to a whole image (cat / dog).",
+      "<strong>Object detection</strong> — finds MULTIPLE objects + bounding boxes (3 cars, 1 person at coordinates...).",
+      "<strong>Semantic segmentation</strong> — labels every PIXEL by class (sky, road, building).",
+      "<strong>OCR</strong> — extracts printed AND handwritten text from images.",
+      "<strong>Sentiment analysis</strong> — positive / neutral / negative / mixed at document & sentence level.",
+      "<strong>Named Entity Recognition (NER)</strong> — extracts people, places, organizations, dates, quantities.",
+      "<strong>Key phrase extraction</strong> — pulls main topics. <strong>Translation</strong> — between languages. <strong>Summarization</strong> — extractive (key sentences) or abstractive (rewrites)."
+    ],
+    remember: [
+      "<strong>Classification is one label. Detection is many objects with boxes. Segmentation is per-pixel.</strong>",
+      "<strong>OCR handles handwritten text too</strong> — not just printed.",
+      "When a review mixes good and bad sentiment in one document → sentiment label is <span class='term'>mixed</span>, not neutral."
+    ],
+    quiz: [
+      "Object detection vs. image classification — what's the difference?",
+      "Which CV task labels every pixel?",
+      "What does NER stand for? Give an example output.",
+      "What sentiment label applies when a document is half-positive and half-negative?",
+      "Name two summarization styles."
+    ] },
+
+  { day: 4, week: 1, topic: "Document intelligence & generative AI", time: "30 min",
+    objective: "Differentiate document intelligence, knowledge mining, and generative AI use cases.",
+    read: [{ label: "Introduction to AI concepts — Units 5–6", url: "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/" }],
+    examTag: "AI workloads",
+    concepts: [
+      "<strong>Document intelligence</strong> — turns docs/forms/invoices into structured fields (key-value pairs, tables, signatures).",
+      "On AI-901 the modern service for this is <strong>Azure Content Understanding</strong> (replaces Form Recognizer / Document Intelligence branding in exam answers).",
+      "<strong>Knowledge mining</strong> — indexes thousands of unstructured docs so users can search & explore (Azure AI Search underpins this).",
+      "<strong>Generative AI</strong> — creates NEW content from prompts: text, code, images (DALL-E), audio, multimodal.",
+      "Generative AI uses <strong>foundation models</strong> like GPT-4o pretrained on huge datasets and adapted via prompts or fine-tuning.",
+      "Common generative scenarios: drafting, summarization, code generation, image creation, agentic assistants."
+    ],
+    remember: [
+      "<strong>If the question says &quot;extract structured fields from an invoice/ID/receipt&quot; → Azure Content Understanding</strong>, not generic OCR.",
+      "<strong>Knowledge mining ≠ search</strong>. Search returns docs; knowledge mining surfaces structure, entities & relationships across them.",
+      "Image generation is generative AI, but <strong>image analysis (classification/detection)</strong> is computer vision."
+    ],
+    quiz: [
+      "Which Azure service extracts vendor, total, and line items from invoices?",
+      "Knowledge mining vs. plain search — what does mining add?",
+      "Name three things generative AI can create besides text.",
+      "Is image classification generative AI? Why or why not?",
+      "What is a foundation model?"
+    ] },
+
+  { day: 5, week: 1, topic: "Responsible AI principles", time: "30 min",
+    objective: "Recite all six Microsoft Responsible AI principles and pair each with a real risk scenario.",
+    read: [{ label: "Introduction to AI concepts — Units 7–8", url: "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/" }],
+    examTag: "Responsible AI (high-yield)",
+    concepts: [
+      "<strong>1. Fairness</strong> — treat all people fairly, avoid bias. Risk: a loan model that rejects more applicants from certain postcodes.",
+      "<strong>2. Reliability &amp; Safety</strong> — works consistently, handles edge cases. Risk: a self-driving system fails in heavy rain.",
+      "<strong>3. Privacy &amp; Security</strong> — protect personal/sensitive data. Risk: medical records leak through model logs.",
+      "<strong>4. Inclusiveness</strong> — empower people of all abilities and backgrounds. Risk: a chatbot fails users with regional accents.",
+      "<strong>5. Transparency</strong> — explain how the system works and its limits. Risk: an audit can't trace why the model rejected an application.",
+      "<strong>6. Accountability</strong> — humans remain responsible for outcomes. Risk: nobody owns when the AI makes a wrong decision."
+    ],
+    remember: [
+      "<strong>Memory hook: F-R-P-I-T-A.</strong> Fairness, Reliability, Privacy, Inclusiveness, Transparency, Accountability.",
+      "<strong>Accountability sits over all the others</strong> — humans are always in charge.",
+      "The exam will test these by SCENARIO. Match the symptom (bias / unsafe / leak / excludes / opaque / no owner) to the principle."
+    ],
+    quiz: [
+      "List all six Responsible AI principles in order.",
+      "An autonomous drone behaves erratically in fog — which principle is most at risk?",
+      "A facial-analysis model performs worse on darker skin tones — which principle?",
+      "A chatbot stores user PII in clear logs — which principle?",
+      "Which principle ensures someone is responsible when an AI causes harm?",
+      "Which principle ensures users understand WHY the AI gave its answer?"
+    ] },
+
+  { day: 6, week: 1, topic: "Module 1 knowledge check", time: "30 min",
+    objective: "Score 80%+ on the Microsoft Learn Module 1 Knowledge Check; review every miss.",
+    read: [{ label: "Knowledge Check — Module 1", url: "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/" }],
+    examTag: "Self-assessment",
+    concepts: [
+      "Module 1 covers Days 1–5: workload categories, ML fundamentals, CV/NLP basics, document intelligence, generative AI, Responsible AI.",
+      "Knowledge Checks are short (5–8 questions) and scored. Re-take is unlimited.",
+      "Don't memorize answers — diagnose <em>why</em> a wrong answer was wrong."
+    ],
+    remember: [
+      "<strong>If you score under 80%, do NOT proceed.</strong> Re-read the unit for any missed question, then retake.",
+      "Wrong-answer journaling: write the question, your answer, the correct answer, and the rule it tests. This builds your cheat sheet."
+    ],
+    quiz: [
+      "Did you score ≥ 80%?",
+      "Which Responsible AI principle did you miss (if any)?",
+      "Which workload did you confuse with another (if any)?",
+      "Have you logged your wrong answers in a notes file?"
+    ] },
+
+  { day: 7, week: 1, topic: "Week 1 review + flashcards", time: "30 min",
+    objective: "Make 12 flashcards covering AI workloads, ML types, RAI principles. Self-test for retention.",
+    read: [],
+    examTag: "Spaced retrieval",
+    concepts: [
+      "Spaced retrieval is the highest-leverage study technique. Re-deriving an answer from memory beats rereading every time.",
+      "Make cards for: 6 workloads, supervised vs. unsupervised, regression vs. classification, 6 RAI principles, key Azure service-to-scenario pairs.",
+      "Front of card = scenario or term. Back = the rule or the matching service."
+    ],
+    remember: [
+      "<strong>Test yourself, don't reread.</strong> If you can't say it from memory, you don't know it yet.",
+      "Common confusions to drill: <span class='term'>Custom Vision</span> vs. <span class='term'>Azure AI Vision</span>; <span class='term'>Document Intelligence</span> vs. <span class='term'>Knowledge Mining</span>; <span class='term'>Sentiment</span> vs. <span class='term'>Key phrase extraction</span>."
+    ],
+    quiz: [
+      "Could you explain Module 1 to a non-technical friend in 5 minutes?",
+      "Quiz yourself: name all 6 RAI principles in 30 seconds.",
+      "Quiz yourself: name all 6 AI workload categories in 30 seconds.",
+      "What concept from Week 1 still feels weakest? Schedule it for review next week."
+    ] },
+
+  // ============ WEEK 2: GenAI, NLP, Speech ============
+  { day: 8, week: 2, topic: "Generative AI fundamentals", time: "30 min",
+    objective: "Describe what an LLM is, how transformer models predict tokens, and key terminology (token, context window, embedding).",
+    read: [{ label: "Introduction to generative AI and agents — Units 1–2", url: "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/" }],
+    examTag: "Generative AI on Azure",
+    concepts: [
+      "<strong>Large Language Model (LLM)</strong> — a foundation model trained on massive text. Predicts the next token given context.",
+      "<strong>Transformer</strong> — the neural network architecture (self-attention) behind modern LLMs.",
+      "<strong>Token</strong> — a chunk of text, ~¾ of a word. Models bill and limit by tokens.",
+      "<strong>Context window</strong> — max tokens the model can consider in one call (input + output combined).",
+      "<strong>Embedding</strong> — a numeric vector representing meaning. Used for semantic search and RAG.",
+      "<strong>Inference parameters</strong>: <span class='term'>temperature</span> (creativity), <span class='term'>max_tokens</span> (length), <span class='term'>top_p</span> (alternative to temp), <span class='term'>frequency_penalty</span>, <span class='term'>presence_penalty</span>."
+    ],
+    remember: [
+      "<strong>Higher temperature = more random/creative.</strong> Temp 0 ≈ deterministic. For factual/data tasks use low temp.",
+      "<strong>The model parameter in code is the DEPLOYMENT NAME</strong> you set in Foundry — not the raw model family name.",
+      "Embeddings are the bridge to <span class='term'>RAG</span>: convert your docs to vectors, store in a vector index, retrieve top-k at query time."
+    ],
+    quiz: [
+      "What is a token? Roughly how many words is one token?",
+      "What does the context window limit?",
+      "Which parameter controls randomness in an LLM's output?",
+      "What's an embedding and what is it used for?",
+      "Name two parameters you'd tune to reduce repetitive output."
+    ] },
+
+  { day: 9, week: 2, topic: "Prompts & prompt engineering", time: "30 min",
+    objective: "Identify good vs. poor prompts; explain system vs. user vs. assistant roles; know zero-shot, few-shot, chain-of-thought.",
+    read: [{ label: "Introduction to generative AI and agents — Unit 3", url: "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/" }],
+    examTag: "Generative AI on Azure",
+    concepts: [
+      "<strong>System message</strong> — sets persona, rules, constraints. Hidden from the user.",
+      "<strong>User message</strong> — the actual request from the user.",
+      "<strong>Assistant message</strong> — the model's reply, also used in few-shot to show example outputs.",
+      "<strong>Zero-shot</strong> — instructions only, no examples.",
+      "<strong>Few-shot</strong> — include 2–5 example input→output pairs to steer format.",
+      "<strong>Chain-of-thought</strong> — ask the model to reason step-by-step for hard problems.",
+      "<strong>Grounding</strong> — paste retrieved facts into the prompt so the model answers from data, not memory (foundation of RAG)."
+    ],
+    remember: [
+      "<strong>Hallucinations are best mitigated by GROUNDING (RAG)</strong>, not by lowering temperature alone.",
+      "A well-formed system prompt includes: persona, format rules, fallback behavior (&quot;say I don't know&quot;), scope/safety constraints.",
+      "<strong>Don't put per-user PII in the system prompt</strong> — it's wasteful and risky."
+    ],
+    quiz: [
+      "What's the difference between a system prompt and a user prompt?",
+      "Define few-shot prompting with one example.",
+      "What's chain-of-thought prompting and when does it help?",
+      "How does RAG reduce hallucinations?",
+      "Should you put a user's email address in the system prompt? Why/why not?"
+    ] },
+
+  { day: 10, week: 2, topic: "AI agents", time: "30 min",
+    objective: "Describe what an AI agent is and the four core components: model, instructions, tools, threads.",
+    read: [{ label: "Introduction to generative AI and agents — Unit 4", url: "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/" }],
+    examTag: "AI agents on Azure",
+    concepts: [
+      "<strong>Agent</strong> = an LLM wrapped with persistent instructions, tools, optional knowledge, and managed conversation state.",
+      "<strong>Model</strong> — the LLM deployment that powers reasoning.",
+      "<strong>Instructions</strong> — system-prompt-style behavior rules for the agent.",
+      "<strong>Tools</strong> — capabilities the agent can call: <span class='term'>File Search</span>, <span class='term'>Code Interpreter</span>, <span class='term'>Functions/OpenAPI</span>, <span class='term'>Azure AI Search</span>, <span class='term'>Bing grounding</span>.",
+      "<strong>Threads</strong> — persistent conversation history per user session.",
+      "<strong>Runs</strong> — one execution of the agent on a thread. The service automatically loops on tool calls."
+    ],
+    remember: [
+      "<strong>Agent vs. chat completion</strong>: agents have memory, tools, and multi-step reasoning. Chat completion is stateless one-shot.",
+      "Use <span class='term'>File Search</span> when you upload documents to the agent. Use <span class='term'>AI Search</span> when content already lives in an indexed search service.",
+      "Use <span class='term'>Code Interpreter</span> for sandboxed Python (data analysis, charts). Use <span class='term'>Functions</span> to call your own APIs."
+    ],
+    quiz: [
+      "What four components define a Foundry agent?",
+      "Difference between an agent and a chatbot?",
+      "Which tool would you attach to let an agent search PDFs you uploaded?",
+      "Which tool would you attach to let an agent run Python on user data?",
+      "What's a thread in agent terminology?"
+    ] },
+
+  { day: 11, week: 2, topic: "NLP concepts", time: "30 min",
+    objective: "Explain tokenization, embeddings, sentiment analysis, key phrase extraction, NER, summarization, translation, language detection.",
+    read: [{ label: "Introduction to natural language processing concepts", url: "https://learn.microsoft.com/en-us/training/modules/introduction-language/" }],
+    examTag: "NLP workloads on Azure",
+    concepts: [
+      "<strong>Tokenization</strong> — splitting text into tokens (subwords) for model input.",
+      "<strong>Embeddings</strong> — vectors that capture semantic meaning; similar texts have similar vectors.",
+      "<strong>Sentiment analysis</strong> — returns positive/neutral/negative/mixed + confidence at sentence and document level.",
+      "<strong>Key phrase extraction</strong> — pulls the most important phrases (&quot;customer service&quot;, &quot;refund&quot;).",
+      "<strong>NER</strong> — finds entities like Person, Location, Organization, Date, Quantity.",
+      "<strong>PII detection</strong> — finds & redacts personal identifiers.",
+      "<strong>Summarization</strong> — extractive (selects key sentences) or abstractive (rewrites).",
+      "<strong>Translation & language detection</strong> — Azure Translator handles 100+ languages."
+    ],
+    remember: [
+      "<strong>Azure AI Language</strong> is the Foundry-Tools service that bundles sentiment, key phrase, NER, PII, summarization, language detection in one resource.",
+      "<strong>Translation is a separate service: Azure AI Translator</strong>.",
+      "Sentiment confidence scores sum to ~1 across positive/neutral/negative."
+    ],
+    quiz: [
+      "What's an embedding and why does similar meaning produce similar vectors?",
+      "What does NER stand for and what's an example output?",
+      "Which Azure service does translation? Which one does sentiment?",
+      "What's the difference between extractive and abstractive summarization?",
+      "What output does sentiment analysis return for a mixed review?"
+    ] },
+
+  { day: 12, week: 2, topic: "Speech concepts", time: "30 min",
+    objective: "Differentiate speech-to-text, text-to-speech, speech translation, and neural voice. Know when multimodal models replace classic speech.",
+    read: [{ label: "Introduction to AI speech concepts", url: "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/" }],
+    examTag: "Speech workloads on Azure",
+    concepts: [
+      "<strong>Speech-to-text (STT)</strong> — transcribes audio into text. Real-time or batch.",
+      "<strong>Text-to-speech (TTS)</strong> — synthesizes audio from text. Modern voices are <strong>neural voices</strong>.",
+      "<strong>Speech translation</strong> — real-time spoken-to-spoken or spoken-to-text translation.",
+      "<strong>Speaker recognition</strong> — verify (1:1) or identify (1:N) a speaker by voice.",
+      "<strong>Custom Neural Voice</strong> — build a branded synthetic voice; access-controlled under Responsible AI.",
+      "<strong>Multimodal audio models</strong> (e.g., GPT-4o realtime) accept audio directly — simpler than chaining STT → LLM → TTS."
+    ],
+    remember: [
+      "<strong>Classic pipeline:</strong> STT → LLM → TTS. <strong>Multimodal:</strong> audio in → audio out, single model.",
+      "Custom Neural Voice <strong>requires Microsoft approval</strong> due to deepfake risk.",
+      "Azure Speech is exposed in Foundry under <strong>Foundry Tools</strong>."
+    ],
+    quiz: [
+      "Which Azure capability transcribes a meeting recording to text?",
+      "What's a neural voice?",
+      "When would you choose a multimodal audio model over the classic STT+LLM+TTS pipeline?",
+      "Why is Custom Neural Voice access-restricted?",
+      "Speaker verification vs. speaker identification — what's the difference?"
+    ] },
+
+  { day: 13, week: 2, topic: "Module knowledge checks", time: "30 min",
+    objective: "Complete Knowledge Checks for generative AI, NLP, and speech modules. Score 80%+ before moving on.",
+    read: [{ label: "Generative AI module", url: "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/" },
+           { label: "NLP module", url: "https://learn.microsoft.com/en-us/training/modules/introduction-language/" },
+           { label: "Speech module", url: "https://learn.microsoft.com/en-us/training/modules/introduction-ai-speech/" }],
+    examTag: "Self-assessment",
+    concepts: [
+      "Three Knowledge Checks today, one per module. Each is 5–8 questions.",
+      "Re-attempt unlimited; goal is mastery, not first-try perfection.",
+      "Log each wrong answer with the rule it tests."
+    ],
+    remember: [
+      "<strong>Don't move to Week 3 if any Knowledge Check is below 80%.</strong> Plug gaps now or pay later.",
+      "Common GenAI miss: confusing temperature with max_tokens. Common NLP miss: confusing key phrase with NER. Common Speech miss: confusing STT with translation."
+    ],
+    quiz: [
+      "Did all three Knowledge Checks score ≥ 80%?",
+      "Which question type tripped you up most?",
+      "Have you written down at least 3 wrong answers with explanations?"
+    ] },
+
+  { day: 14, week: 2, topic: "Week 2 review", time: "30 min",
+    objective: "Build a 1-page cheat sheet linking each concept to a real Azure service.",
+    read: [],
+    examTag: "Spaced retrieval",
+    concepts: [
+      "Cheat-sheet structure: <strong>Scenario keyword → Azure service</strong>. Memorize 15–20 of these.",
+      "Examples: &quot;summarize document&quot; → Azure AI Language. &quot;translate webpage&quot; → Azure AI Translator. &quot;chat with my docs&quot; → Foundry agent + File Search or AI Search.",
+      "Re-test yourself on Days 8–12 flashcards. Schedule the weakest topic for Day 21 review."
+    ],
+    remember: [
+      "If you can read a scenario and name the right service in <strong>under 30 seconds</strong>, you'll fly through 60% of the exam.",
+      "Don't memorize service names alone — memorize the <em>scenario phrasing</em> Microsoft uses (&quot;extract structured fields&quot;, &quot;ground in my data&quot;, &quot;real-time voice&quot;)."
+    ],
+    quiz: [
+      "Could you explain at an interview why you'd pick generative AI vs. classical NLP for a use case?",
+      "Service for: extract invoice fields → ?",
+      "Service for: real-time spoken translation → ?",
+      "Service for: chat that searches your uploaded PDFs → ?"
+    ] },
+
+  // ============ WEEK 3: CV, Extraction, First Labs ============
+  { day: 15, week: 3, topic: "Computer vision concepts", time: "30 min",
+    objective: "Identify image classification, object detection, segmentation, OCR. Describe filters, CNNs, and the role of training data.",
+    read: [{ label: "Introduction to computer vision concepts — Units 1–4", url: "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/" }],
+    examTag: "Computer vision on Azure",
+    concepts: [
+      "<strong>Image classification</strong> — one label per image.",
+      "<strong>Object detection</strong> — many objects with bounding boxes + class labels.",
+      "<strong>Semantic segmentation</strong> — every pixel labeled.",
+      "<strong>OCR / Read</strong> — extracts printed and handwritten text.",
+      "<strong>Convolutional filters</strong> — small matrices that detect edges, textures, shapes by sliding over the image.",
+      "<strong>CNNs</strong> stack convolutional + pooling layers to learn hierarchical features (edges → shapes → objects).",
+      "<strong>Training data quality matters</strong> — biased or sparse data leads to biased or unreliable models."
+    ],
+    remember: [
+      "<strong>If a question describes drawing rectangles around items → object detection.</strong>",
+      "<strong>If it describes coloring every pixel → semantic segmentation.</strong>",
+      "Custom Vision lets you train your own classifier or detector with your own labeled images."
+    ],
+    quiz: [
+      "Object detection vs. image classification?",
+      "What does a convolutional filter do?",
+      "What's the difference between object detection and semantic segmentation?",
+      "Custom Vision supports two project types — what are they?",
+      "Why does training data quality matter for fairness?"
+    ] },
+
+  { day: 16, week: 3, topic: "Vision transformers & image generation", time: "30 min",
+    objective: "Describe ViT vs. CNN at a high level; explain multimodal and image generation models.",
+    read: [{ label: "Introduction to computer vision concepts — Units 5–6", url: "https://learn.microsoft.com/en-us/training/modules/introduction-computer-vision/" }],
+    examTag: "Computer vision on Azure",
+    concepts: [
+      "<strong>Vision Transformer (ViT)</strong> — applies the transformer architecture (self-attention) to image patches instead of convolutions.",
+      "<strong>Multimodal models</strong> (GPT-4o, Phi-3-Vision) accept images AND text in one prompt and reply in text.",
+      "<strong>Image generation models</strong> create images from text: <span class='term'>DALL-E 3</span>, <span class='term'>GPT-image</span>, Stable Diffusion variants.",
+      "Image generation use cases: marketing creative, product mockups, educational illustrations, accessibility (alt-text scenes).",
+      "Generated images carry <strong>provenance metadata</strong> (C2PA) so they can be traced back to AI."
+    ],
+    remember: [
+      "<strong>If a scenario says &quot;analyze image AND reply in text&quot; → multimodal model</strong> (one call), not separate vision service + LLM.",
+      "<strong>Image generation is generative AI</strong>. Image analysis is computer vision. Don't confuse them.",
+      "Foundry exposes DALL-E 3 in the model catalog — deploy and call it like a chat model."
+    ],
+    quiz: [
+      "What is a multimodal model?",
+      "Name two Azure scenarios where image generation is useful.",
+      "ViT vs. CNN — high-level difference?",
+      "Why does Microsoft add provenance metadata to AI-generated images?",
+      "Generating a marketing illustration — generative AI or computer vision?"
+    ] },
+
+  { day: 17, week: 3, topic: "Information extraction concepts", time: "30 min",
+    objective: "Distinguish OCR, prebuilt document models, custom extraction, and Azure Content Understanding.",
+    read: [{ label: "Introduction to AI-powered information extraction concepts", url: "https://learn.microsoft.com/en-us/training/modules/introduction-information-extraction/" }],
+    examTag: "Information extraction on Azure",
+    concepts: [
+      "<strong>OCR</strong> — extracts raw text only.",
+      "<strong>Prebuilt document models</strong> — already-trained for invoices, receipts, IDs, business cards, W-2s, contracts.",
+      "<strong>Custom document models</strong> — train on your own forms (5+ samples).",
+      "<strong>Azure Content Understanding</strong> — modern unified service for extracting structured fields from <em>documents, images, audio, AND video</em>. AI-901's preferred answer.",
+      "<strong>Analyzer schema</strong> — JSON spec defining the fields to extract (name, type, description).",
+      "Replaces these older names in exam answers: Form Recognizer, Document Intelligence, Video Indexer."
+    ],
+    remember: [
+      "<strong>Exam trap:</strong> if the answer choices include both &quot;Document Intelligence&quot; and &quot;Content Understanding&quot;, prefer <span class='term'>Content Understanding</span> on AI-901.",
+      "Content Understanding handles <strong>video</strong> (transcript, scenes, on-screen text, faces, topics) — replacing Video Indexer.",
+      "<strong>OCR alone won't extract structure</strong> (which value is the total? which is the vendor?). Use Content Understanding for that."
+    ],
+    quiz: [
+      "Which Azure capability extracts data from a structured invoice?",
+      "Why use Content Understanding over plain OCR?",
+      "What's an analyzer schema in Content Understanding?",
+      "Can Content Understanding process video? Audio?",
+      "What's the difference between prebuilt and custom document models?"
+    ] },
+
+  { day: 18, week: 3, topic: "LAB: Generative AI in Azure", time: "30 min",
+    objective: "Set up Microsoft Foundry, deploy a chat model, and run a chat completion in the playground and via Python.",
+    read: [{ label: "Get started with generative AI and agents in Azure", url: "https://learn.microsoft.com/en-us/training/modules/get-started-with-generative-ai-and-agents/" },
+           { label: "Lab portal", url: "https://microsoftlearning.github.io/mslearn-ai-concepts/" }],
+    examTag: "Generative AI on Azure",
+    concepts: [
+      "<strong>Microsoft Foundry</strong> = unified workbench (formerly Azure AI Foundry / Azure AI Studio). Catalog → deployment → playground → SDK.",
+      "<strong>Resource hierarchy</strong>: Subscription → Resource group → Foundry account → Project → Deployment.",
+      "<strong>Deployment</strong> = a specific model + version + capacity, exposed at an endpoint. Code calls it by deployment name.",
+      "<strong>Playgrounds</strong>: chat, completions, images, speech, agents — for prompt prototyping.",
+      "<strong>Foundry SDK (Python)</strong>: <span class='term'>azure-ai-inference</span> with <span class='term'>ChatCompletionsClient</span> + <span class='term'>DefaultAzureCredential</span>."
+    ],
+    remember: [
+      "<strong>Pass the deployment NAME, not the model family name</strong>, in code (e.g., <span class='term'>model=&quot;contoso-chat-prod&quot;</span>).",
+      "Use <span class='term'>DefaultAzureCredential</span> over API keys whenever possible (keyless / Entra ID).",
+      "<strong>Deployment types</strong>: Standard, Global Standard, DataZone Standard, PTUs, Serverless API."
+    ],
+    code: "# pip install azure-ai-inference azure-identity\nfrom azure.ai.inference import ChatCompletionsClient\nfrom azure.ai.inference.models import SystemMessage, UserMessage\nfrom azure.identity import DefaultAzureCredential\n\nclient = ChatCompletionsClient(\n    endpoint=\"https://<project>.services.ai.azure.com/models\",\n    credential=DefaultAzureCredential()\n)\nresp = client.complete(\n    model=\"gpt-4o-mini\",       # the DEPLOYMENT NAME\n    messages=[\n        SystemMessage(content=\"You are concise.\"),\n        UserMessage(content=\"Summarize Azure Foundry in 1 line.\")\n    ],\n    temperature=0.3, max_tokens=120\n)\nprint(resp.choices[0].message.content)",
+    quiz: [
+      "What is Microsoft Foundry?",
+      "What's the difference between a model and a deployment?",
+      "What does DefaultAzureCredential do?",
+      "What value goes in the model parameter when calling client.complete?",
+      "Name 3 of the 5 deployment types."
+    ] },
+
+  { day: 19, week: 3, topic: "LAB: Text analysis in Azure", time: "30 min",
+    objective: "Run sentiment, key-phrase, NER, language detection, PII, and summarization in Azure AI Language.",
+    read: [{ label: "Lab portal", url: "https://microsoftlearning.github.io/mslearn-ai-concepts/" }],
+    examTag: "NLP on Azure",
+    concepts: [
+      "<strong>Azure AI Language</strong> bundles: sentiment, key phrase extraction, NER, language detection, PII detection, summarization, conversational language understanding (CLU), question answering.",
+      "<strong>Language Studio</strong> — web UI to test features without code.",
+      "Calling from code: REST API or <span class='term'>azure-ai-textanalytics</span> Python package.",
+      "Sentiment returns label + per-class confidence at sentence and document level.",
+      "<strong>CLU</strong> classifies utterances into intents and extracts entities — used for chatbots."
+    ],
+    remember: [
+      "<strong>One Azure AI Language resource</strong> covers many features — you don't deploy each one separately.",
+      "<strong>CLU is the modern replacement for LUIS.</strong> If you see LUIS in an answer, it's outdated.",
+      "<strong>Translation is NOT in Azure AI Language</strong> — it's Azure AI Translator."
+    ],
+    quiz: [
+      "Which four core features ship in Azure AI Language?",
+      "What's returned by sentiment analysis?",
+      "What replaces LUIS in modern Azure?",
+      "Sentiment analysis vs. key phrase extraction — what's the output difference?",
+      "Where would you go to redact phone numbers from chat logs?"
+    ] },
+
+  { day: 20, week: 3, topic: "LAB: Speech in Azure", time: "30 min",
+    objective: "Run STT and TTS via Foundry Tools / Azure Speech.",
+    read: [{ label: "Explore AI speech (lab)", url: "https://microsoftlearning.github.io/mslearn-ai-concepts/Instructions/exercises/04-speech.html" }],
+    examTag: "Speech on Azure",
+    concepts: [
+      "<strong>Azure Speech</strong> exposed in Foundry Tools: STT, TTS, translation, speaker recognition.",
+      "Apps need: <strong>endpoint</strong> + <strong>key</strong> (or Entra credential) + <strong>region</strong>.",
+      "Python SDK: <span class='term'>azure-cognitiveservices-speech</span>. Class: <span class='term'>SpeechRecognizer</span> for STT, <span class='term'>SpeechSynthesizer</span> for TTS.",
+      "Real-time STT streams partial transcriptions; batch STT processes long audio asynchronously."
+    ],
+    remember: [
+      "<strong>Speech SDK is separate from Azure AI Inference SDK.</strong> Different package, different patterns.",
+      "Region matters — your Speech resource is region-bound (not global)."
+    ],
+    code: "import azure.cognitiveservices.speech as speechsdk\n\ncfg = speechsdk.SpeechConfig(subscription=\"<key>\", region=\"eastus\")\naudio = speechsdk.AudioConfig(filename=\"meeting.wav\")\nrecognizer = speechsdk.SpeechRecognizer(speech_config=cfg, audio_config=audio)\nresult = recognizer.recognize_once_async().get()\nprint(result.text)",
+    quiz: [
+      "What endpoint info does an app need to call Azure Speech?",
+      "Which SDK class transcribes speech-to-text in Python?",
+      "Real-time vs. batch STT — when do you use each?",
+      "Is the Speech SDK the same package as the Foundry Inference SDK? Why does that matter?"
+    ] },
+
+  { day: 21, week: 3, topic: "Week 3 review", time: "30 min",
+    objective: "Update your cheat sheet with Azure service names: Foundry, Azure AI Language, Azure AI Translator, Azure Speech, Content Understanding, AI Search.",
+    read: [],
+    examTag: "Spaced retrieval",
+    concepts: [
+      "Service-to-scenario fluency is the single biggest exam predictor. If you can pattern-match scenarios in seconds, you save time for the hard questions.",
+      "Top 12 mappings to memorize cold:",
+      "<em>generate / draft / write</em> → Azure OpenAI / Foundry chat model.",
+      "<em>analyze image + reply in text</em> → multimodal model in Foundry.",
+      "<em>generate image</em> → DALL-E 3 in Foundry.",
+      "<em>extract fields from form/invoice/ID/video</em> → Azure Content Understanding.",
+      "<em>sentiment / NER / key phrase / PII / summarize</em> → Azure AI Language.",
+      "<em>translate text or doc</em> → Azure AI Translator.",
+      "<em>real-time speech</em> → Azure AI Speech.",
+      "<em>chat with my own docs</em> → Foundry agent + File Search or AI Search.",
+      "<em>search across thousands of docs</em> → Azure AI Search.",
+      "<em>build chatbot with intents</em> → Azure AI Language CLU."
+    ],
+    remember: [
+      "<strong>If you find yourself debating between two services, the one that mentions Foundry / Content Understanding / AI Search is probably correct on AI-901.</strong>"
+    ],
+    quiz: [
+      "Given a scenario, can you pick the right Azure service in under 30 seconds?",
+      "Test yourself on the top 12 mappings without looking.",
+      "Which service did you forget? Make a flashcard."
+    ] },
+
+  // ============ WEEK 4: Labs Finish + Mock + Launch ============
+  { day: 22, week: 4, topic: "LAB: Computer vision in Azure", time: "30 min",
+    objective: "Run image analysis (tags/captions) and image generation in Foundry. Inspect raw model output.",
+    read: [{ label: "Explore computer vision (lab)", url: "https://microsoftlearning.github.io/mslearn-ai-concepts/Instructions/exercises/05-vision.html" }],
+    examTag: "Computer vision on Azure",
+    concepts: [
+      "Image analysis returns tags, captions, objects, people, brands, dominant colors.",
+      "Image generation: deploy DALL-E 3 in Foundry, send a text prompt, receive a URL.",
+      "Multimodal chat: send an image alongside text and ask the model to describe, classify, or extract content.",
+      "Prompt engineering for images: include subject, composition, lighting, style."
+    ],
+    remember: [
+      "<strong>To analyze an image WITH text questions, use a multimodal chat model</strong>, not the standalone vision API.",
+      "<strong>Image generation costs more</strong> per request than text — design prompts carefully."
+    ],
+    code: "# Image generation via Azure OpenAI client\nresp = client.images.generate(\n    model=\"dall-e-3\",\n    prompt=\"Minimalist product photo of a ceramic mug on walnut, soft window light\",\n    size=\"1024x1024\", n=1\n)\nimage_url = resp.data[0].url",
+    quiz: [
+      "Which Foundry model would you use to caption an image and answer questions about it?",
+      "Which model generates an image from text?",
+      "Can you send both an image and a text question in one prompt?",
+      "What 4 elements make a good image-generation prompt?"
+    ] },
+
+  { day: 23, week: 4, topic: "LAB: Information extraction", time: "30 min",
+    objective: "Extract structured fields from a document using a prebuilt model and define a custom analyzer schema in Content Understanding.",
+    read: [{ label: "Explore information extraction (lab)", url: "https://microsoftlearning.github.io/mslearn-ai-concepts/Instructions/exercises/06-info-extraction.html" }],
+    examTag: "Information extraction on Azure",
+    concepts: [
+      "Prebuilt models: invoice, receipt, ID document, business card, W-2, contract.",
+      "Custom analyzers: define an <strong>analyzer schema</strong> with the fields you want.",
+      "Output: structured JSON with each field's value and confidence.",
+      "Works on PDFs, images, audio, video — same service."
+    ],
+    remember: [
+      "<strong>Prebuilt is faster — try it before you train a custom model.</strong>",
+      "Custom training requires only a handful of labeled samples (5+)."
+    ],
+    code: "{\n  \"name\": \"invoice-extractor\",\n  \"baseAnalyzerId\": \"prebuilt-documentAnalyzer\",\n  \"fieldSchema\": {\n    \"fields\": {\n      \"invoiceNumber\": { \"type\": \"string\" },\n      \"vendorName\":    { \"type\": \"string\" },\n      \"totalAmount\":   { \"type\": \"number\" }\n    }\n  }\n}",
+    quiz: [
+      "Difference between a prebuilt and custom document model?",
+      "How do you tell Content Understanding which fields to extract?",
+      "What output format does extraction return?",
+      "Roughly how many samples do you need to train a custom analyzer?"
+    ] },
+
+  { day: 24, week: 4, topic: "LAB: Simple AI agent", time: "30 min",
+    objective: "Create an agent in the Foundry Agent Service, attach a tool (File Search or Code Interpreter), and run a multi-turn conversation.",
+    read: [{ label: "Lab portal — Explore agent", url: "https://microsoftlearning.github.io/mslearn-ai-concepts/" }],
+    examTag: "AI agents on Azure",
+    concepts: [
+      "Build flow: pick a model deployment → write instructions → attach tools → upload knowledge files → test in playground.",
+      "<strong>4-step client app pattern</strong>: create thread → add user message → run agent → list messages.",
+      "<span class='term'>create_and_process</span> handles the tool-call loop automatically.",
+      "Each user gets their own thread; threads persist conversation context."
+    ],
+    remember: [
+      "<strong>Agent components: Model + Instructions + Tools (+ optional knowledge).</strong>",
+      "Use the agent's ID (<span class='term'>asst_...</span>) to reference it in code."
+    ],
+    code: "from azure.ai.agents import AgentsClient\nfrom azure.ai.agents.models import MessageRole\nfrom azure.identity import DefaultAzureCredential\n\nc = AgentsClient(endpoint=\"https://...\", credential=DefaultAzureCredential())\nthread = c.threads.create()\nc.messages.create(thread_id=thread.id, role=MessageRole.USER,\n                  content=\"Summarize the policy doc.\")\nrun = c.runs.create_and_process(thread_id=thread.id, agent_id=\"asst_abc\")\nfor m in c.messages.list(thread_id=thread.id):\n    if m.role == MessageRole.AGENT:\n        print(m.content[0].text.value); break",
+    quiz: [
+      "What 3 things does an agent need to be useful (model, instructions, ___)?",
+      "What does create_and_process do in the Agents SDK?",
+      "How do you read the agent's reply after a run?",
+      "What is a thread?"
+    ] },
+
+  { day: 25, week: 4, topic: "Targeted gap review", time: "30 min",
+    objective: "Re-take any Microsoft Learn knowledge checks under 80%. Re-read those units. Focus on Responsible AI and service-name recognition.",
+    read: [{ label: "All Module Knowledge Checks", url: "https://learn.microsoft.com/en-us/training/paths/ai-concepts/" }],
+    examTag: "Targeted review",
+    concepts: [
+      "Pull up your wrong-answer log from Days 6 / 13 / 19. Group misses by theme.",
+      "If RAI keeps tripping you up: drill the F-R-P-I-T-A scenarios until you can match each in 5 seconds.",
+      "If service names trip you up: re-do the Day 21 cheat sheet from memory, then check.",
+      "If code snippets trip you up: re-read Day 18's Foundry SDK example out loud."
+    ],
+    remember: [
+      "<strong>You don't need to learn everything — you need to fix what you got wrong.</strong> Spend today on weakness, not strengths.",
+      "Confirm 80%+ on every Knowledge Check before mock-exam day."
+    ],
+    quiz: [
+      "Are all Knowledge Checks now ≥ 80%?",
+      "Which Responsible AI principle is still your weakest? Re-read it.",
+      "Can you write the Foundry SDK chat example from memory?"
+    ] },
+
+  { day: 26, week: 4, topic: "Mock exam practice run", time: "30 min",
+    objective: "Take a free practice exam — the official AI-901 practice if available, else AI-900 practice. Score yourself.",
+    read: [{ label: "AI-901 exam page", url: "https://learn.microsoft.com/en-us/credentials/certifications/exams/ai-901/" }],
+    examTag: "Exam prep",
+    concepts: [
+      "Use this as a diagnostic, not a final test. The real mock is tomorrow.",
+      "If you score ≥ 80%, you're on track. 70–79%: doable but tighten weak areas. Below 70%: extend timeline.",
+      "Pay attention to question STYLE: case studies, drag-and-drop, multiple-answer, hot-spot. Microsoft mixes them."
+    ],
+    remember: [
+      "<strong>The exam will throw at least one Python snippet at you.</strong> Practice reading code under time pressure.",
+      "<strong>Mark uncertain questions and come back.</strong> Don't burn 5 minutes on one question — flag and move."
+    ],
+    quiz: [
+      "Score ≥ 75%? You're exam-ready. Below? Identify weak modules and review.",
+      "Which question type was hardest (multi-answer, case study, snippet)?",
+      "Did you finish in time? If not, work on pace."
+    ] },
+
+  { day: 27, week: 4, topic: "🎯 MOCK EXAM DAY", time: "60 min", isMock: true,
+    objective: "Sit a full timed mock exam, no notes, simulating exam conditions. Review every wrong answer.",
+    read: [{ label: "AI-901 practice assessment", url: "https://learn.microsoft.com/en-us/credentials/certifications/exams/ai-901/" }],
+    examTag: "Final simulation",
+    concepts: [
+      "<strong>Conditions matter.</strong> Quiet room, no notes, phone away, 60-minute timer.",
+      "Don't pause halfway. Push through fatigue — that's the real exam experience.",
+      "Afterwards: spend 30 minutes mapping each wrong answer to a Microsoft Learn unit.",
+      "Pass mark on the real exam: 700/1000 (~70%). Aim for ≥ 80% on this mock for confidence."
+    ],
+    remember: [
+      "<strong>If you pass this mock above 80%, you're genuinely ready.</strong>",
+      "<strong>If you score 70–79%</strong>, you're in pass territory but should drill weakest module overnight.",
+      "<strong>If you score below 70%</strong>, push the exam back a week — don't waste the booking fee."
+    ],
+    quiz: [
+      "What was your final score?",
+      "Which module had the most misses?",
+      "Re-read those units tonight. Tomorrow is launch day."
+    ] },
+
+  { day: 28, week: 4, topic: "Final review + book exam", time: "30 min",
+    objective: "Review cheat sheet, re-read all Responsible AI content, and book the AI-901 exam.",
+    read: [{ label: "Schedule AI-901", url: "https://learn.microsoft.com/en-us/credentials/certifications/exams/ai-901/" }],
+    examTag: "Launch",
+    concepts: [
+      "Final pass strategy: read your cheat sheet, then your wrong-answer log, then the 6 Responsible AI principles. That's 90% of the high-yield content.",
+      "<strong>Book the exam.</strong> Pearson VUE online proctored is fastest. Test-center if you prefer.",
+      "Day-before: light review only, sleep early, hydrate. Don't cram.",
+      "Day-of: read every question twice. Watch for &quot;NOT&quot;, &quot;EXCEPT&quot;, &quot;FALSE&quot; in stems. Flag uncertain, don't dwell."
+    ],
+    remember: [
+      "<strong>You've put in the work.</strong> Trust your prep. Confidence is itself a skill.",
+      "<strong>Print the AI-901 exam confirmation</strong> with date and check-in time."
+    ],
+    quiz: [
+      "Exam booked? Date written down?",
+      "Have you re-read the 6 Responsible AI principles today?",
+      "Have you re-read your wrong-answer log?",
+      "You're ready. Go pass it."
+    ] }
+];
+
+const weekTitles = {
+  1: { title: "Foundations: AI, ML & Responsible AI", goal: "Build the conceptual base. By Sunday you should describe what AI is, the main workload categories, and the six Responsible AI principles." },
+  2: { title: "Generative AI, NLP & Speech (Concepts)", goal: "Understand LLMs, prompts, agents, and the core ideas behind Azure's language and speech services." },
+  3: { title: "Computer Vision, Extraction & First Labs", goal: "Round out concept coverage and start the Azure hands-on path." },
+  4: { title: "Labs Finish + Mock Exam + Launch", goal: "Complete remaining hands-on labs, plug gaps, and pass a full mock exam." }
+};
+
+const STORAGE_KEY = 'ai901_progress_v1';
+let completed = new Set();
+try { completed = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')); } catch(e) {}
+
+function saveProgress() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed]));
+  updateProgressBar();
+}
+function updateProgressBar() {
+  const pct = (completed.size / 28) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('doneCount').textContent = completed.size;
+  document.querySelectorAll('.day').forEach(el => {
+    const n = parseInt(el.dataset.day, 10);
+    el.classList.toggle('is-done', completed.has(n));
+  });
+}
+
+function render() {
+  const root = document.getElementById('journey-root');
+  root.innerHTML = '';
+  for (let w = 1; w <= 4; w++) {
+    const section = document.createElement('section');
+    section.className = 'week';
+    section.innerHTML = `
+      <div class="week-header">
+        <span class="week-number">Week ${w}</span>
+        <h2 class="week-title">${weekTitles[w].title}</h2>
+      </div>
+      <p class="week-goal">${weekTitles[w].goal}</p>
+      <div class="journey" id="week-${w}-grid"></div>
+    `;
+    root.appendChild(section);
+    const grid = section.querySelector('.journey');
+    days.filter(d => d.week === w).forEach(d => {
+      const div = document.createElement('div');
+      div.className = 'day' + (d.isMock ? ' is-mock' : '') + (completed.has(d.day) ? ' is-done' : '');
+      div.dataset.day = d.day;
+      div.innerHTML = `
+        <div class="dot">${completed.has(d.day) ? '✓' : d.day}</div>
+        <span class="day-num">Day ${d.day}</span>
+        <div class="day-topic">${d.topic}</div>
+        <div class="day-time">${d.time}</div>
+      `;
+      div.addEventListener('click', () => openModal(d));
+      grid.appendChild(div);
+    });
+  }
+  updateProgressBar();
+}
+
+function openModal(d) {
+  const m = document.getElementById('modal');
+  const readsHtml = d.read.length
+    ? '<ul>' + d.read.map(r => `<li><a href="${r.url}" target="_blank" rel="noopener">${r.label}</a></li>`).join('') + '</ul>'
+    : '<p style="color:var(--ink-dim);font-style:italic">No new reading — review/practice day.</p>';
+  const quizHtml = d.quiz.length
+    ? '<details class="quiz-toggle"><summary>Show self-quiz</summary><ol>' + d.quiz.map(q => `<li>${q}</li>`).join('') + '</ol></details>'
+    : '';
+  const conceptsHtml = (d.concepts && d.concepts.length)
+    ? '<h3>Key concepts</h3><div class="detail-block"><ul>' +
+        d.concepts.map(c => `<li>${c}</li>`).join('') + '</ul></div>'
+    : '';
+  const rememberHtml = (d.remember && d.remember.length)
+    ? '<h3>Things to remember</h3><div class="detail-block remember"><ul>' +
+        d.remember.map(r => `<li>${r}</li>`).join('') + '</ul></div>'
+    : '';
+  const codeHtml = d.code
+    ? '<h3>Code you should recognize</h3><div class="code-block">' +
+        d.code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>'
+    : '';
+  const isDone = completed.has(d.day);
+  m.innerHTML = `
+    <h2>Day ${d.day} — ${d.topic}</h2>
+    <div class="modal-meta">Week ${d.week} · ${d.time}</div>
+    <span class="tag">${d.examTag}</span>
+    <h3>Objective</h3>
+    <p>${d.objective}</p>
+    ${conceptsHtml}
+    ${rememberHtml}
+    ${codeHtml}
+    <h3>Mandatory reading</h3>
+    ${readsHtml}
+    <h3>Self-quiz</h3>
+    ${quizHtml}
+    <div class="modal-actions">
+      <button class="btn done-btn" id="toggleDoneBtn">${isDone ? '✓ Marked complete — undo' : 'Mark complete'}</button>
+      <button class="btn ghost" id="closeBtn">Close</button>
+    </div>
+  `;
+  document.getElementById('toggleDoneBtn').onclick = () => {
+    if (completed.has(d.day)) completed.delete(d.day); else completed.add(d.day);
+    saveProgress();
+    closeModal();
+  };
+  document.getElementById('closeBtn').onclick = closeModal;
+  document.getElementById('modalBackdrop').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('show');
+}
+document.getElementById('modalBackdrop').addEventListener('click', e => {
+  if (e.target.id === 'modalBackdrop') closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+document.getElementById('resetBtn').onclick = () => {
+  if (confirm('Reset all progress?')) {
+    completed = new Set();
+    saveProgress();
+    render();
+  }
+};
+
+render();
+</script>
+</body>
+</html>
